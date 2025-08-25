@@ -1,77 +1,8 @@
 Тестоый мод, созданный ИИ
 
 Код файла MyReadPic\config.cpp:
-class CfgPatches 
+            };
 
-    {  
-	    class MyReadPic { 
-		  units[] = {"MyPicturePaper"}; 
-		  weapons[] = {}; 
-		  requiredVersion = 0.1; 
-		  requiredAddons[] = 
-		    {
-			  "DZ_Data",
-			  "DZ_Scripts",
-			  "DZ_Gear_Consumables"
-		    }; 
-	}; 
-};
-
-         class CfgMods 
-		 { 
-		 class MyReadPic 
-		 { 
-		 dir = "MyReadPic"; 
-		 picture = ""; 
-		 action = ""; 
-		 hideName = 1; 
-		 hidePicture = 1; 
-		 name = "MyReadPic"; 
-		 credits = ""; 
-		 author = "you"; 
-		 version = "1.0"; 
-		 type = "mod"; 
-		 dependencies[
-		 ] 
-		 =  {
-			 "World",
-			 "Mission"
-			}; 
-		 class defs 
-		 { 
-		 class gameScriptModule
-        {
-            value = "";
-            files[] = {"$CurrentDir:MyReadPic/scripts/3_Game"};
-        };
-        class worldScriptModule
-        {
-            value = "";
-            files[] = {"$CurrentDir:MyReadPic/scripts/4_World"};
-        };
-        class missionScriptModule
-        {
-            value = "";
-            files[] = {"$CurrentDir:MyReadPic/scripts/5_Mission"};
-        }; 
-	}; 
-};
-
-         class CfgVehicles 
-		 { class Paper; 
-		 class MyPicturePaper: Paper 
-		 { 
-		 scope = 2; 
-		 displayName = "Картинка на бумаге"; 
-		 descriptionShort = "Прочтите, чтобы увидеть изображение."; 
-		 model = "\dz\gear\consumables\t_note.p3d"; // стандартная модель Paper // при желании можно задать другие параметры, коллизии и т.п. 
-		 }; 
-};
-
-class CfgScriptedMenus
-{
-    PictureViewerMenu = "PictureViewerMenu";
-};
 
 Код файла MyReadPic\scripts\3_Game\Defines.c :
 static const int MYREADPIC_MENU_ID = 95001;
@@ -226,5 +157,79 @@ modded class MissionGameplay
         return null;
     } 
 }
+
+Код файла MyReadPic\GUI\layouts\MyReadPic\PictureViewer.layout :
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<layout>
+    <name>PictureViewerMenu</name>
+    <menu_type>PictureViewerMenu</menu_type>
+    <options>Scripted</options>
+    
+    <root>
+        <widget>
+            <name>Background</name>
+            <type>ImageWidget</type>
+            <pos>0 0</pos>
+            <size>1 1</size>
+            <alpha>0.5</alpha>
+            <image>GUI/textures/black.edds</image>
+            <flags>Exclusive|Background</flags>
+        </widget>
+        
+        <widget>
+            <name>MainPanel</name>
+            <type>PanelWidget</type>
+            <pos>0.2 0.1</pos>
+            <size>0.6 0.8</size>
+            <alpha>0.9</alpha>
+            <image>GUI/textures/black.edds</image>
+            <flags>Visible|Exclusive</flags>
+            
+            <widget>
+                <name>TitleText</name>
+                <type>TextWidget</type>
+                <pos>0.05 0.02</pos>
+                <size>0.9 0.08</size>
+                <text>Просмотр изображения</text>
+                <font>Bold</font>
+                <textsize>24</textsize>
+                <textcolor>FFFFFFFF</textcolor>
+                <align>center</align>
+                <flags>Visible</flags>
+            </widget>
+            
+            <widget>
+                <name>ImageContainer</name>
+                <type>PanelWidget</type>
+                <pos>0.05 0.12</pos>
+                <size>0.9 0.75</size>
+                <alpha>1.0</alpha>
+                <image>GUI/textures/black.edds</image>
+                <flags>Visible</flags>
+                
+                <widget>
+                    <name>PictureImage</name>
+                    <type>ImageWidget</type>
+                    <pos>0.05 0.05</pos>
+                    <size>0.9 0.9</size>
+                    <alpha>1.0</alpha>
+                    <flags>Visible</flags>
+                    <image>MyReadPic\\textures\\MyReadPic\\paper_image.edds</image> <!-- Заглушка -->
+                </widget>
+            </widget>
+            
+            <widget>
+                <name>CloseButton</name>
+                <type>ButtonWidget</type>
+                <pos>0.35 0.9</pos>
+                <size>0.3 0.08</size>
+                <text>Закрыть</text>
+                <textsize>20</textsize>
+                <textcolor>FFFFFFFF</textcolor>
+                <flags>Visible</flags>
+            </widget>
+        </widget>
+    </root>
+</layout>
 
 файл MyReadPic\textures\MyReadPic\paper_image.edds
