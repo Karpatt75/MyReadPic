@@ -1,7 +1,122 @@
 Тестоый мод, созданный ИИ
 
 Код файла MyReadPic\config.cpp:
+class CfgPatches
+{
+    class MyReadPic
+    {
+        units[] = {};
+        weapons[] = {};
+        requiredVersion = 0.1;
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Consumables"};
+        
+        scripts[] = {
+            "MyReadPic/scripts/3_Game/Defines", // ← ДОБАВЛЕНО
+            "MyReadPic/scripts/4_World/myreadpic/items/MyPicturePaper",
+            "MyReadPic/scripts/4_World/myreadpic/actions/ActionReadPicture", 
+            "MyReadPic/scripts/5_Mission/myreadpic/gui/PictureViewerMenu"
+        };
+    };
+};
+
+class CfgMods
+{
+    class MyReadPic
+    {
+        type = "mod";
+        
+        class defs
+        {
+            class gameScriptModule
+            {
+                value = "";
+                files[] = {"MyReadPic/scripts/3_Game"}; // ← ДОБАВЛЕНО
             };
+            
+            class worldScriptModule
+            {
+                value = "";
+                files[] = {"MyReadPic/scripts/4_World"};
+            };
+            
+            class missionScriptModule 
+            {
+                value = "";
+                files[] = {"MyReadPic/scripts/5_Mission"};
+            };
+        };
+    };
+};
+
+class CfgScriptedMenus
+{
+    PictureViewerMenu = "PictureViewerMenu";
+};
+
+class CfgVehicles 
+{
+    class Paper;
+    class MyPicturePaper: Paper 
+    { 
+        scope = 2; 
+        displayName = "Картинка на бумаге"; 
+        descriptionShort = "Прочтите, чтобы увидеть изображение."; 
+        model = "\dz\gear\consumables\t_note.p3d";
+        
+        // Основные параметры
+        itemSize[] = {1, 1};
+        weight = 10;
+        varQuantityInit = 1;
+        varQuantityMin = 0;
+        varQuantityMax = 1;
+        quantityBar = 0;
+        canBeSplit = 0;
+        stackedUnit = "";
+        destroyOnEmpty = 0;
+        
+        // Визуальные настройки
+        hiddenSelections[] = {"zbytek"};
+        hiddenSelectionsTextures[] = {"MyReadPic\\textures\\MyReadPic\\paper_icon.edds"};
+        
+        // Звуки
+        soundImpactType = "paper";
+		
+		inventorySlot = "Paper";
+        itemBehaviour = 0;
+        openable = 0;
+        varWetMax = 0.3;
+        
+        // Действия
+        class DamageSystem
+        {
+            class GlobalHealth
+            {
+                class Health
+                {
+                    hitpoints = 10;
+                    healthLevels[] = {
+                        {1.0,{"dz\gear\consumables\data\t_note.rvmat"}},
+                        {0.7,{"dz\gear\consumables\data\t_note.rvmat"}},
+                        {0.5,{"dz\gear\consumables\data\t_note_damage.rvmat"}},
+                        {0.3,{"dz\gear\consumables\data\t_note_damage.rvmat"}},
+                        {0.0,{"dz\gear\consumables\data\t_note_destruct.rvmat"}}
+                    };
+                };
+            };
+        };
+	};
+};
+
+class CfgNonAIVehicles
+{
+    class ProxyAttachment;
+    class ProxyPaper: ProxyAttachment
+    {
+        scope = 2;
+        inventorySlot = "Paper";
+        model = "\dz\gear\consumables\t_note.p3d";
+    };
+};
 
 
 Код файла MyReadPic\scripts\3_Game\Defines.c :
@@ -158,7 +273,7 @@ modded class MissionGameplay
     } 
 }
 
-Код файла MyReadPic\GUI\layouts\MyReadPic\PictureViewer.layout :
+Код файла MyReadPic\GUI\layouts\PictureViewer.layout :
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <layout>
     <name>PictureViewerMenu</name>
